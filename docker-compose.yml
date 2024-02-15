@@ -1,6 +1,63 @@
 version: '3'
 
 services:
+  order-db:
+    container_name: order-db
+    image: mongo:latest
+    restart: always
+    networks:
+      - orchestrator-saga
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123123
+      MONGO_INITDB_DATABASE: order-db
+    ports:
+      - "27017:27017"
+
+  product-db:
+    container_name: product-db
+    image: postgres:latest
+    restart: always
+    networks:
+      - orchestrator-saga
+    environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: 123123
+        POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres/product-db:/var/lib/postgresql/data
+
+  payment-db:
+    container_name: payment-db
+    image: postgres:latest
+    restart: always
+    networks:
+      - orchestrator-saga
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: db
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./data/postgres/payment-db:/var/lib/postgresql/data
+
+  inventory-db:
+    container_name: inventory-db
+    image: postgres:latest
+    restart: always
+    networks:
+      - orchestrator-saga
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: db
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./data/postgres/inventory-db:/var/lib/postgresql/data
 
   kafka:
     container_name: kafka
