@@ -64,16 +64,6 @@ public class KafkaConfig {
                 .build();
     }
 
-    @Bean
-    public NewTopic startSagaTopic() {
-        return buildTopic(startSagaTopic);
-    }
-
-    @Bean
-    public NewTopic notifyEndingTopic() {
-        return buildTopic(startSagaTopic);
-    }
-
     private static class KafkaConsumerConfig {
         private static Map<String, Object> consumerConfig(final String bootstrapServers,
                                                           final String groupId,
@@ -100,5 +90,15 @@ public class KafkaConfig {
             return props;
         }
 
+    }
+
+    @Bean
+    public NewTopic startSagaTopic() {
+        return buildTopic(startSagaTopic);
+    }
+
+    @Bean
+    public NewTopic notifyEndingTopic() {
+        return buildTopic(notifyEndingTopic);
     }
 }
