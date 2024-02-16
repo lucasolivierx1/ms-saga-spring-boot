@@ -1,6 +1,6 @@
-package br.com.microservices.orchestrated.orchestratorservice.kafka;
+package br.com.microservices.orchestrated.orchestratorservice.config.kafka;
 
-import br.com.microservices.orchestrated.orchestratorservice.TopicsEnum;
+import br.com.microservices.orchestrated.orchestratorservice.core.enums.TopicsEnum;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;

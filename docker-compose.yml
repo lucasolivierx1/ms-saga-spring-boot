@@ -21,9 +21,9 @@ services:
     networks:
       - orchestrator-saga
     environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: 123123
-        POSTGRES_DB: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123123
+      POSTGRES_DB: db
     ports:
       - "5432:5432"
     volumes:
@@ -97,6 +97,92 @@ services:
           brokers: ["kafka:29092"]
     depends_on:
       - "kafka"
+
+
+  order-service:
+    build: './order-service'
+    container_name: order-service
+    restart: always
+    depends_on:
+      - order-db
+      - kafka
+    networks:
+      - orchestrator-saga
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - MONGO_DB=mongodb://root:123123@order-db:27017/order-db
+    ports:
+      - "3000:3000"
+
+  orchestrator-service:
+    build: './orchestrator-service'
+    container_name: orchestrator-service
+    restart: always
+    networks:
+      - orchestrator-saga
+    depends_on:
+      - kafka
+    environment:
+      - KAFKA_BROKER=kafka:29092
+    ports:
+      - "8080:8080"
+
+  product-validation-service:
+    build: './product-validation-service'
+    container_name: product-validation-service
+    restart: always
+    networks:
+      - orchestrator-saga
+    depends_on:
+      - kafka
+      - product-db
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - DB_HOST=product-db
+      - DB_PORT=5432
+      - DB_NAME=db
+      - DB_USER=postgres
+      - DB_PASSWORD=123123
+    ports:
+      - "8090:8090"
+
+  inventory-service:
+    build: './inventory-service'
+    container_name: inventory-service
+    restart: always
+    networks:
+      - orchestrator-saga
+    depends_on:
+      - kafka
+      - product-db
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - DB_HOST=inventory-db
+      - DB_PORT=5432
+      - DB_NAME=db
+      - DB_USER=postgres
+      - DB_PASSWORD=123123
+    ports:
+      - "8092:8092"
+
+  payment-service:
+    build: './payment-service'
+    container_name: payment-service
+    restart: always
+    networks:
+      - orchestrator-saga
+    depends_on:
+      - kafka
+      - payment-db
+    environment:
+      - KAFKA_BROKER=kafka:29092
+      - DB_HOST=product-db
+      - DB_PORT=5432
+      - DB_NAME=db
+      - DB_USER=postgres
+      - DB_PASSWORD=123123
+    ports:
+      - "8091:8091"
 
 networks:
   orchestrator-saga:

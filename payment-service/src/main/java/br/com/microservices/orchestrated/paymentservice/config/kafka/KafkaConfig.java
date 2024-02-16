@@ -1,4 +1,4 @@
-package br.com.microservices.orchestrated.inventoryservice.kafka;
+package br.com.microservices.orchestrated.paymentservice.config.kafka;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
@@ -32,15 +32,14 @@ public class KafkaConfig {
     @Value("${spring.kafka.consumer.auto-offset-reset}")
     private String autoOffsetReset;
 
-
     @Value("${spring.kafka.topic.orchestrator}")
     private String orchestratorTopic;
 
-    @Value("${spring.kafka.topic.inventory-success}")
-    private String inventorySuccessTopic;
+    @Value("${spring.kafka.topic.payment-success}")
+    private String paymentSuccessTopic;
 
-    @Value("${spring.kafka.topic.inventory-fail}")
-    private String inventoryFailTopic;
+    @Value("${spring.kafka.topic.payment-fail}")
+    private String paymentFailTopic;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {
@@ -58,6 +57,7 @@ public class KafkaConfig {
     public KafkaTemplate<String, String> kafkaTemplate(ProducerFactory<String, String> producerFactory) {
         return new KafkaTemplate<>(producerFactory);
     }
+
     private NewTopic buildTopic(String name) {
         return TopicBuilder
                 .name(name)
@@ -71,13 +71,13 @@ public class KafkaConfig {
     }
 
     @Bean
-    public NewTopic inventorySuccessTopic() {
-        return buildTopic(inventorySuccessTopic);
+    public NewTopic paymentSuccessTopic() {
+        return buildTopic(paymentSuccessTopic);
     }
 
     @Bean
-    public NewTopic inventoryFailTopic() {
-        return buildTopic(inventoryFailTopic);
+    public NewTopic paymentFailTopic() {
+        return buildTopic(paymentFailTopic);
     }
 
 
